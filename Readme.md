@@ -52,7 +52,7 @@ Ordered  my mini serie from LitOn https://www.leiton.de/kalkulation.html
 #### Linux
 
 All Linux kernel > 2.6 have a native support for the I/O-Warrior USB devices! There is no extra installation of a kernel modul. thus is is PNP - Plug and Play :-)  
-iowarrior kernel module: https://github.com/torvalds/linux/blob/main/drivers/usb/misc/iowarrior.c
+iowarrior kernel module: https://github.com/torvalds/linux/blob/master/drivers/usb/misc/iowarrior.c
 
 System 
 ```
@@ -197,7 +197,7 @@ done
 ### HD44780 Display of the Cobalt (HDM16216L-5)
 ![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/imgs/HD44780_Pinout.jpg)
 
-![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/doc/127855466716216l5.pdf)
+![PDF](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/doc/127855466716216l5.pdf)
 
 ### Pinout cobalt and IOW24
 ![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/imgs/Pinout_Project.jpg)
