@@ -1,7 +1,7 @@
 # Display Adapter for Cobalt RAQ 3/4 LCD Display with Linux USB 
 
-https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/imgs/Pinout_Project.jpg
-![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltDisplayUSB/blob/main/img/display1.jpg)
+
+![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/imgs/coretemp1.jpg)
 
 About 15 years ago I developed a adapter to interface Sun Cobalt RaQ 4 LCD display with a normal mainboard by USB self-made adapter.
 
@@ -13,7 +13,6 @@ This github page should document how to use the Sun Cobalt display in general.
 ## My project:
 ### Images 
 
-![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/imgs/coretemp1.jpg)
 
 ![Title](https://raw.githubusercontent.com/bohnelang/SunCobaltLCDDisplayUSB/main/imgs/inside1.jpg)
 
