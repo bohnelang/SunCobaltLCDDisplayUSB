@@ -1,0 +1,29 @@
+Installing the IOWarrior Linux SDK
+
+Installation is a two step process :
+
+1. Unpack and install the kernel-module driver for the IOWarrior.
+-----------------------------------------------------------------
+Because of major changes in the usb-core of the linux kernel>=2.6.20
+The drivers code had to be updated in various places.
+There are now two differnet versions of the driver package.
+
+1a) If you are running a linux-kernel<=2.6.19 
+    Unpack the kernel module driver sources iowarrior-module-2.6
+    tar xzf iowarrior-module-2.6.tar.gz 
+    'cd' into the newly created directory 'iowarrior-2.6'
+    Follow the instructions in file './iowarrior-2.6/INSTALL' 
+
+1b) If you are running a linux-kernel==2.6.20 
+    Unpack the kernel module driver sources iowarrior-module-2.6.20
+    tar xzf iowarrior-module-2.6.20.tar.gz 
+    'cd' into the newly created directory 'iowarrior-2.6.20'
+    Follow the instructions in file './iowarrior-2.6.20/INSTALL' 
+
+
+2. Unpack and install the iowkit-library for the IOWarrior
+----------------------------------------------------------
+Unpack the iowkit library sources
+	tar xzf libiowkit-1.5.0 
+'cd' into directory 'libiowkit-1.5.0'
+Follow the instructions in file './libiowkit-1.5.0/INSTALL' 

@@ -1,0 +1,20 @@
+Installing libiowkit.so follows the standard way of
+
+./configure
+make
+make install
+
+"make install" has to be run as root.
+
+"make" will compile libiowkit.so locally and also compile a test application tests/iowkittest.
+"make install" will copy libiowkit.so to /usr/lib and call ldconfig to make it globally accessible.
+Also iowkit.h is copied to /usr/include for the same reason.
+
+Installing Java support is explained separately in INSTALL_JAVA.
+
+If the driver for the IO-Warrior has been installed also then you need to unplug and replug
+all IO-Warrior devices to allow udev to recognize the devices (if udev is used on your computer).
+after that executing tests/iowkittest should blink with all LEDs of the IO-Warrior devices plugged.
+From one of the devices (/dev/usb/iowarrior0) the IO pins are read several times.
+So if you get a nice blinkenlights the installation was successful.
+Read doc/IO-WarriorLibrary.pdf and start writing your own applications.

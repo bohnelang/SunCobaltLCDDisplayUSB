@@ -1,0 +1,6 @@
+java-install:
+	java -cp iow_install.jar com.codemercs.install.IowkitInstall $(libdir) iowkit codemercs.jar
+
+java-uninstall:
+	java -cp iow_install.jar com.codemercs.install.IowkitUninstall iowkit codemercs.jar
+

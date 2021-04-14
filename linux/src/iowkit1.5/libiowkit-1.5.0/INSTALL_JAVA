@@ -1,0 +1,71 @@
+Simple install procedure
+========================
+  # Install the Iowkit-Library as already explained in file 'INSTALL'
+  # and then ... [you need to be root to make this work!]
+  % make java-install	#enable java-support
+
+What 'make java-install' does to your machine
+=============================================
+The Iowkit-Library provides build-in support for Java because it already 
+implements the JavaNativeInterface-requirements. The Java-side (i.e. the
+definition of the native methods needed to access the library) is found in the
+file 'java/codemercs.jar' which contains only a single class:
+'com.codemercs.iow.IowKit' 
+
+What needs to be done is:
+1. Put the library 'libiowkit.so' into one of the directories that are defined
+   in the System.property 'java.library.path' of your Java-Runtime.
+
+2. Add the class 'com.codemercs.iow.IowKit' to the classpath that is searched
+   by the Java-Runtime.
+
+The problem with step 1 is: 
+There is no easy way to find out which directories are set in the 
+System.property 'java.library.path' without running the
+JavaVirtualMachine. 
+So this is exactly what we are doing: 'make java-install' will run a small 
+java-app that reads the 'java.library.path' property form its own environment. 
+Then it creates a symbolic link from the first entry found in the property, 
+to the 'libiowkit.so'-file that was created when you called 'make install' 
+in the basic installation of the Iowkit-Library.
+
+There is similar situation for Step 2 (adding 'codemercs.jar' to the classpath
+of the Java-Runtime): 
+There are lots of different ways to add a class to the classpath of the JRE
+but only one of them can be fairly easy automated. That is put the class (or
+the jar-file in our case) into one of the directories mentioned in the
+System.property 'java.ext.dirs'. So this is what we are doing. The same app
+that created the link to the library, will copy the file 'codemercs.jar' into
+the first entry of the 'java.ext.dirs' property. So the class
+'com.codemercs.iow.IowKit' will automatically be in your classpath.
+
+Testing java support
+====================
+After installing the IowKit-Library ('make install') and Java support ('make
+java-install') cd' into the tests-directory and run 
+'java -jar iowkit_test.jar'
+from the commandline. 
+
+If java-support is properly installed, the test will now print the current version
+of the installed Java-IowKit-Library. Report all IOWarriors attached, blink their
+LED's a little bit, Read the changes on the IO-Pins and exit.
+
+Removing Java support
+=====================
+  # [you need to be root to make this work!]
+  # To remove the java-support simply use ...	
+  % make java-uninstall 
+
+(Note: Removing java-support does not remove the IowKit-Library itself from
+your system, use 'make uninstall' to do this!)
+
+What 'make java-uninstall' does to your machine
+===============================================
+A small java-app will be lauchned, that recurses through all directories in
+the System.property 'java.library.path', and deletes all files and/or
+links-to-files that have the (exact) name 'libiowkit.so'. In a second step,
+the app will recurse through all directories in the System.property
+'java.ext.dirs' and delete all files and/or
+links-to-files that have the (exact) name 'codemercs.jar'.
+
+

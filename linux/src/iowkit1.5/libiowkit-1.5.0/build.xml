@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+  <project name="Iow" default="help" basedir=".">
+  	<property name="build.compiler" value="modern" /> 
+	<property name="build.compiler.emacs" value="true" />
+	<property name="build.compiler.fulldepend" value="true" />
+	<property name="build.compiler.pedantic" value="false" />
+	<property name="build.compiler.source" value="1.4" />
+	<property name="docdir" value="${basedir}/doc"/>
+	<property name="jardir" value="${basedir}/java"/>
+	<property name="classdir" value="${basedir}/java/classes"/>
+	<property name="srcdir" value="${basedir}/java/src" />
+	<property name="stubdir" value="${basedir}/src" />
+	<property name="testdir" value="${basedir}/tests" />
+	<property name="build.optimize" value="on" />
+	<property name="build.debug" value="on" />
+	<property file="build.settings" />
+
+<!-- show some help -->
+<target name="help" >
+<echo>
+usage:
+  ant rebuild    rebuild everything innthe project
+  ant -help      display ant help screen
+  ant help       display this message
+  ant all        compile all classes
+  ant jar        build the all the jar-files  
+  ant doc	 run javadoc on the packages and create the documention
+		 in the doc/api directory
+  ant stub	 create the stubfile iowkitjni.h in the C-source directory		 
+  ant clean      deletes all compiled classes
+  ant cleandoc   deletes the documentation created by javadoc
+  ant cleanall   deletes all compiled classes, documentation and jar files
+
+</echo>      
+</target>
+	
+<!-- Delete the compiled classes to allow a full rebuild -->
+<target name="clean" >
+	<delete	includeEmptyDirs="true" 
+		failonerror="false">
+		<fileset dir="${classdir}/com/" />
+	</delete>
+</target>
+	
+<!-- Delete the documentation created by javadoc -->
+<target name="cleandoc">
+	<delete	includeEmptyDirs="true"
+		failonerror="false" >
+		<fileset dir="${docdir}/java/iowkit/" />				 
+		<fileset dir="${docdir}/java/util/" />				 
+		<fileset dir="${docdir}/java/test/" />				 
+	</delete>
+</target>
+
+<!-- Delete the compiled class, the documentation and the jarfile -->
+<target name="cleanall" depends="clean,cleandoc">
+	<delete	includeEmptyDirs="true"
+		failonerror="false" >
+		<fileset	dir="${jardir}/"
+				includes="codemercs.jar" />
+		<fileset	dir="${jardir}/"
+				includes="iow_install.jar" />
+		<fileset	dir="${jardir}/"
+				includes="iow_test.jar" />
+	</delete>
+</target>
+
+<!-- The iowkit classes -->
+<target name="iow">
+	<javac	srcdir="${srcdir}"
+		destdir="${classdir}"
+		debug="${build.debug}"
+		optimize="${build.optimize}"
+		source="${build.compiler.source}" >
+		<include name="com/codemercs/iow/*.java"/>
+	</javac>
+</target>
+
+
+<!-- A install-app for the iowarrior -->
+<target name="install">
+	<javac	srcdir="${srcdir}"
+		destdir="${classdir}"
+		debug="${build.debug}"
+		optimize="${build.optimize}"
+		source="${build.compiler.source}" >
+		<include name="com/codemercs/install/**/*.java"/>
+	</javac>
+</target>
+
+<!-- A test-app for the iowkit-lib -->
+<target name="test">
+	<javac	srcdir="${srcdir}"
+		destdir="${classdir}"
+		debug="${build.debug}"
+		optimize="${build.optimize}"
+		source="${build.compiler.source}" >
+		<include name="com/codemercs/test/*.java"/>
+	</javac>
+</target>
+
+
+<!-- Compile everything -->
+<target name="all" depends="iow,install,test">
+</target>
+
+<!-- Create the stub for the lib and copy it into the lib-source-dir-->
+<target name="stub" depends="all">
+	<!-- create the stub for native methods -->
+	<javah	outputFile="${stubdir}/iowkitjni.h"
+		force="true"
+		verbose="false">
+		<classpath>
+			<pathelement path="${classdir}"/>
+		</classpath>
+		<class name="com.codemercs.iow.IowKit"/>
+	</javah>
+</target>
+
+<!-- Create the documentation for the iowkit-api -->
+<target name="iowkit-doc" depends="all">
+	<javadoc	packagenames="com.codemercs.iow"
+			sourcepath="${srcdir}"
+			destdir="${docdir}/java/iowkit"
+			package="true"
+			author="true"
+			version="true"
+			use="true"						 
+			windowtitle="Codemercs-Api" >
+	</javadoc>
+</target>
+
+
+<!-- Create the documentation for the install utility -->
+<target name="install-doc" depends="all">
+	<javadoc	packagenames="com.codemercs.install,
+	                              com.codemercs.install.linux,
+	                              com.codemercs.install.windows"
+			sourcepath="${srcdir}"
+			destdir="${docdir}/java/util"
+			package="true"
+			author="true"
+			version="true"
+			use="true"						 
+			windowtitle="Codemercs-Util-Api" >
+	</javadoc>
+</target>
+
+<!-- Create the documentation for the test app -->
+<target name="test-doc" depends="all">
+	<javadoc	packagenames="com.codemercs.test"
+			sourcepath="${srcdir}"
+			destdir="${docdir}/java/test"
+			package="true"
+			author="true"
+			version="true"
+			use="true"						 
+			windowtitle="Iowkit-Test-Api" >
+	</javadoc>
+</target>
+
+<!-- create the complete java documentation -->
+<target name="doc" depends="iowkit-doc, install-doc, test-doc" />
+
+<!-- create the jar for the iowkit-lib -->
+<target name="codemercs_jar" depends="iow">
+	<tstamp/>
+	<buildnumber file="build.settings" />
+	<!-- the classes -->
+	<jar	jarfile="${jardir}/codemercs.jar" 
+		basedir="${classdir}" 
+		includes="com/codemercs/iow/**" >
+		<manifest>
+			<attribute name="Built-By" value="${build.user.name}"/>
+			<attribute name="Date" value="${TODAY}"/>
+			<attribute name="Build" value="${build.version}${build.number}"/>
+		</manifest>		
+	</jar>
+	<!-- and the source -->
+ 	<jar	jarfile="${jardir}/codemercs.jar" 
+	        update="true"
+		basedir="${basedir}"
+		includes="src/com/codemercs/iow/*.java" >
+	</jar>
+</target>
+
+<!-- create the jar for the installation of the iowkit-lib -->
+<target name="iow_install_jar" depends="install">
+	<tstamp/>
+	<buildnumber file="build.settings" />
+	<!-- the classes -->
+	<jar	jarfile="${jardir}/iowkit_install.jar" 
+		basedir="${classdir}" 
+		includes="com/codemercs/install/**" >
+		<manifest>
+			<attribute name="Built-By" value="${build.user.name}"/>
+			<attribute name="Date" value="${TODAY}"/>
+			<attribute name="Build" value="${build.version}${build.number}"/>
+		</manifest>		
+	</jar>
+	<!-- and the source -->
+ 	<jar	jarfile="${jardir}/iowkit_install.jar" 
+	        update="true"
+		basedir="${basedir}"
+		includes="src/com/codemercs/install/**/*.java" >
+	</jar>
+</target>
+
+<!-- create the jar for the testing the iowkit-lib -->
+<target name="iow_test_jar" depends="test">
+	<tstamp/>
+	<buildnumber file="build.settings" />
+	<!-- the classes -->
+	<jar	jarfile="${testdir}/iowkit_test.jar" 
+		basedir="${classdir}" 
+		includes="com/codemercs/test/**" >
+		<manifest>
+			<attribute name="Built-By" value="${build.user.name}"/>
+			<attribute name="Date" value="${TODAY}"/>
+			<attribute name="Build" value="${build.version}${build.number}"/>
+ 			<attribute name="Main-Class" value="com.codemercs.test.IowBlink"/>
+		</manifest>		
+	</jar>
+	<!-- and the source -->
+ 	<jar	jarfile="${jardir}/iowkit_test.jar" 
+	        update="true"
+		basedir="${basedir}"
+		includes="src/com/codemercs/test/*.java" >
+	</jar>
+</target>
+
+<!-- create all the jar files -->
+<target name="jar" depends="codemercs_jar,iow_install_jar,iow_test_jar" />
+
+<!-- This target will rebuild the whole project -->
+<target name="rebuild" depends="all,stub,doc,jar" />
+
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

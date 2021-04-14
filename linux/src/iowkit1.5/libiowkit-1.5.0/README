@@ -1,0 +1,13 @@
+libiowkit.so is a dynamic library which implements a simple API for access of IO-Warrior devices
+from Code Mercenaries (http://www.codemercs.com). The API is documented in doc/IO-WarriorLibrary.pdf.
+The dynamic library also implements direct support for Java by implementing a class through JNI.
+
+libiowkit.so depends on the driver iowarrior.ko.(see Driver directory) so you need to install the driver first.
+
+For installation instructions for the library read INSTALL.
+If you want to enable the java-support in the library read INSTALL_JAVA
+
+If, for whatever reason, you need to rebuild the java-part of the library some hints are found in
+'COMPILE_JAVA'
+
+

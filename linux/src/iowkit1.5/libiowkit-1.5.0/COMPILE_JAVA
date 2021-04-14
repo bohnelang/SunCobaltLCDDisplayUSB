@@ -1,0 +1,26 @@
+Instructions on rebuilding the java-support in the iowkit-library.
+
+NOTE : You don't have to do this ! Everything in the java-part of the library 
+is already in place when you unpack the sources!
+ 
+So there should be no need to rebuild anything in the java-support for the 
+iowkit-lib, but if you really want to go for it, here are some hints.
+
+You will need the following applications to be installed on your system:
+ant - for controlling the build-process
+javac - the compiler for the java-sources
+javadoc - for rebuilding the documentation
+javah - for building the iowkit-library stub
+
+The easyest way is to go to the top-dir of the library and type
+'ant rebuild' 
+on the commandline. This will simply rebuild everything concerning the java-part
+of the library.
+
+Simply calling  
+'ant'
+without any commandline-parameters will print s short description of the other 
+available build-targets.
+
+
+

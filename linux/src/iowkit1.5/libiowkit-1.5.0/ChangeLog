@@ -1,0 +1,44 @@
+2007-02-07 Eberhard Fahle
+	* build.xml the build-file for ant is now at the toplevel-directory.
+	* added targets for building the java documentation in directory
+	./doc/java/
+	* added a task 'make scrdoc' that rebuilds the (C-)library-documentation
+	in directory ./doc/html. doxygen must be installed if you want to do this.
+	* configure.in /usr/lib and /usr/include are now the default
+	installation directories. (KUbuntu did not find the iowkit-lib
+	in /usr/local/lib).
+	
+2005-11-14 Eberhard Fahle
+	* src/iowkit.c : switched back to  
+	'/dev/usb/iowarior' as the base-filename for the devices
+		
+2005-11-13 Eberhard Fahle 
+	* INSTALL_JAVA : add some information for using the 
+	'make java-(un)install' targets.
+	
+	* doc/IO-Warrior Library.pdf : renamed the file to
+	IO-WarriorLibrary.pdf
+	./configure choked on the Space-char in the original filename
+
+	* doc/ : add a new directory to the distribution that contains
+	additional documentation for the iowkit-lib
+	
+	* src/iowkit.c : commented out a few obsolete #include-statements
+	//#include <asm/types.h>
+	//#include <linux/input.h>
+	//#include <linux/ioctl.h>
+
+2005-11-12 Eberhard Fahle
+	* configure.in : add a switch to disable debug for compiling.
+	compilation now removes the -g flag when 
+	'./configure --enable-debug=no' is used. 
+	
+	* configure.in : set the -Wall flag for all compiling-targets
+
+	* java/Makefile.am : add 2 more targets for java-support
+	'make java-install' and  'make java-uninstall'
+	
+	
+	
+	
+	

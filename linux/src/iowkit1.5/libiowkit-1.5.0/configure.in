@@ -1,0 +1,110 @@
+# require atleast autoconf 2.13
+AC_PREREQ(2.13)
+
+# init autoconf
+AC_INIT([libiowkit],[1.5.0])
+
+AC_CONFIG_SRCDIR([src/iowkit.c])
+AC_CONFIG_SRCDIR([tests/iowkittest.c])
+
+AH_TOP(
+#undef LINUX_API
+
+#undef LIBIOWKIT_MAJOR_VERSION
+#undef LIBIOWKIT_MINOR_VERSION
+#undef LIBIOWKIT_MICRO_VERSION
+)
+
+AM_INIT_AUTOMAKE()
+
+#Define a version for the iowkit-lib distribution
+LIBIOWKIT_CURRENT=1
+LIBIOWKIT_REVISION=5
+LIBIOWKIT_AGE=0
+LIBIOWKIT_RELEASE=$LIBIOWKIT_CURRENT.$LIBIOWKIT_REVISION
+AC_SUBST(LIBIOWKIT_CURRENT)
+AC_SUBST(LIBIOWKIT_REVISION)
+AC_SUBST(LIBIOWKIT_AGE)
+AC_SUBST(LIBIOWKIT_RELEASE)
+
+
+AC_CONFIG_HEADERS([config.h])
+
+# we build a shared library, so we need to initialize libtool
+AM_PROG_LIBTOOL
+
+# check for plattform, currently only linux-support
+LINUX_API=0
+
+AC_MSG_CHECKING(for OS support on $host)
+case $host in
+  *-linux*)
+    AC_DEFINE(LINUX_API, 1)
+    os_support=linux
+    AC_MSG_RESULT(Compiling on Linux)
+    ;;
+  *)
+    #either the architekture is not supported or we are not on Linux
+    AC_MSG_RESULT(unknown operating system)
+    AC_MSG_ERROR(libiowkit does not support compiling for $host)
+    ;;
+esac
+
+AC_SUBST(LINUX_API)
+
+# we can now use a LINUX_API conditional in makefiles
+# should this ever be ported to a different platform
+AM_CONDITIONAL(LINUX_API, test "$os_support" = "linux")
+
+debug_default=no
+
+#check for the C-compiler
+AC_PROG_CC
+#set default flags for the compiler
+CFLAGS="-O2 -Wall"
+
+# enable debugging by default
+debug_default="yes"
+# If now the user runs ./configure with --enable-debug=no set expicitly we turn off the -g flag for the compiler
+AC_ARG_ENABLE(debug, [  --enable-debug=[no/yes] turn on debugging (default=yes)],,enable_debug=$debug_default)
+if test "x$enable_debug" = "xyes"; then
+   CFLAGS="$CFLAGS -g"
+fi
+
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([string.h stdio.h stdlib.h errno.h sys/ioctl.h sys/types.h sys/stat.h unistd.h time.h pthread.h])
+
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_CHECK_FUNCS([memset select strtoul])
+
+# We build a library so we need this one...
+AC_PROG_LIBTOOL
+
+# check if we have a JVM
+AC_CHECK_PROG(JAVA_BIN,"java","yes","no")
+# targets "make java-install / make java-uninstall" can only
+# be run if we find a JAVA_BIN 
+AM_CONDITIONAL(HAS_JAVA, test "$JAVA_BIN" = "yes")
+
+# target "make srcdoc" can only be run if we found the DOXYGEN_BIN 
+AC_CHECK_PROG(DOXYGEN_BIN,"doxygen","yes","no")
+AM_CONDITIONAL(HAS_DOXYGEN, test "$DOXYGEN_BIN" = "yes")
+
+# we want the lib in /usr/lib and the header in /usr/include as a default
+AC_PREFIX_DEFAULT([/usr])
+
+AC_CONFIG_FILES([
+  Makefile
+  src/Makefile
+  tests/Makefile
+  java/Makefile
+])
+
+AC_OUTPUT
+
+
+
